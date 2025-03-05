@@ -1,4 +1,20 @@
 services:
+  backend:
+    build:
+      context: .  # Build the container from the current directory
+      dockerfile: dev.Dockerfile  # Use dev.Dockerfile for development
+    volumes:
+      - ./:/usr/src/app  # Mount the current directory into the container
+      - /usr/src/app/node_modules  # Prevent overwriting node_modules
+    ports:
+      - "3000:3000"  # Map the backend port to the host machine
+    environment:
+      - REDIS_URL=redis://redis:6379  # Set Redis URL
+      - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database  # Use 'mongo' service name instead of localhost
+    depends_on:
+      - mongo
+      - redis
+
   mongo:
     image: mongo
     ports:
